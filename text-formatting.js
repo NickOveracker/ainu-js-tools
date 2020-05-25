@@ -56,6 +56,8 @@ function addAllAccents() {
     if(vocab[ii].hasAttribute('accent')) {
       syllable = vocab[ii].getAttribute('accent');
     }
-    vocab[ii].textContent = addAccent(vocab[ii].textContent, syllable);
+    if(syllable >= 0) {
+    	vocab[ii].textContent = addAccent(vocab[ii].textContent, syllable);
+    }
   }
 }
