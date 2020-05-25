@@ -86,21 +86,22 @@ function formatAinuVocabList() {
     
     for(let ii = 0; ii < vocab.length; ii++) {
         let syllable = 0;
-		let kana = '';
-		
-		if(vocab[ii].hasAttribute('setkana')) {
-			kana = vocab[ii].getAttribute('setkana');
-		}
-		else {
-			kana = latinToKana(vocab[ii].textContent);
-		}
-		
-		if(vocab[ii].hasAttribute('accent')) {
+        let kana = '';
+        
+        if(vocab[ii].hasAttribute('setkana')) {
+            kana = vocab[ii].getAttribute('setkana');
+        }
+        else {
+            kana = latinToKana(vocab[ii].textContent);
+        }
+        
+        if(vocab[ii].hasAttribute('accent')) {
             syllable = vocab[ii].getAttribute('accent');
         }
         if(syllable >= 0) {
-            vocab[ii].textContent = addAccent(vocab[ii].textContent, syllable) + "　（" + kana + "）";
+            vocab[ii].textContent = addAccent(vocab[ii].textContent, syllable);
         }
+    vocab[ii].textContent += "　（" + kana + "）";
     }
 }
 
