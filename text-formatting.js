@@ -101,7 +101,7 @@ function formatAinuVocabList() {
         if(syllable >= 0) {
             vocab[ii].textContent = addAccent(vocab[ii].textContent, syllable);
         }
-    vocab[ii].textContent += "　（" + kana + "）";
+    vocab[ii].textContent += "（" + kana + "）";
     }
 }
 
