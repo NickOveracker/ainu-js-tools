@@ -94,7 +94,7 @@ function formatAinuVocabList() {
            vocab[ii].classList.contains("vocab-verb2") || 
            vocab[ii].classList.contains("vocab-verb3")) {
             var verb = vocab[ii].textContent;
-            verbs[ii].classList.add("tooltip");
+            vocab[ii].classList.add("tooltip");
             var tip = vocab[ii].appendChild(document.createElement("span"));
             tip.classList.add("tooltiptext");
             var table = tip.appendChild(document.createElement("table"));
