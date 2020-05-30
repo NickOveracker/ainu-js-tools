@@ -97,8 +97,8 @@ function formatAinuVocabList() {
             var verb = vocab[ii].textContent;
             vocab[ii].classList.add("tooltip");
             tooltip = document.createElement("span");
-            tip.classList.add("tooltiptext");
-            var table = tip.appendChild(document.createElement("table"));
+            tooltip.classList.add("tooltiptext");
+            var table = tooltip.appendChild(document.createElement("table"));
             for(var jj = 0; jj < 5; jj++) {
                 var row  = table.appendChild(document.createElement("tr"));
                 if(jj === 0) {
