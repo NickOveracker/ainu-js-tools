@@ -1,26 +1,35 @@
-function Verb(stem, en_1s, en_3s, en_other, transitivity) {
+/**
+ * @param stem:         The immutable stem of the verb in Latin characters.
+ * @param transitivity: One of the following values.
+ *                      0: Impersonal
+ *                      1: Intransitive
+ *                      2: Transitive
+ *                      3: Ditransitive
+ * @param plurality:    One of the following values.
+ *                      0: Singular or plural
+ *                      1: Singular only
+ *                      2: Plural only
+ * @param accent:       -1 if regular, -2 if unaccented.
+ *                      Otherwise, the number of the accented syllable.
+ * @param definition:   English definition.
+ */
+function Verb(stem, transitivity, plurality, accent, definition) {
 	this.stem = stem;
 	this.transitivity = transitivity;
-	this.english = {
-		first: {
-			singular: en_1s,
-			plural: en_other
-		},
-		second: {
-			singular: en_other,
-			plural: en_other
-		},
-		third: {
-			singular: en_3s,
-			plural: en_other
-		}
-	};
+	this.plurality = plurality;
+	this.accent = accent;
+	this.definition = definition;
 }
 
 Verb.prototype.useShortPrefix = function() {
+	return this.stem.charAt(0) !== 'i' && this.startsWithVowel();
+}
+
+Verb.prototype.startsWithVowel = function() {
 	switch(this.stem.charAt(0).toLowerCase()) {
 		case 'a':
 		case 'e':
+		case 'i':
 		case 'o':
 		case 'u':
 			return true;
@@ -92,7 +101,7 @@ Verb.prototype.conjugateClass2 = function(person, singular) {
 	if(singular) {
 		switch(person) {
 			case 1:
-				if(this.startsWithVowel()) {
+				if(this.useShortPrefix()) {
 					prefix = "k=";
 				}
 				else {
@@ -112,7 +121,7 @@ Verb.prototype.conjugateClass2 = function(person, singular) {
 	else {
 		switch(person) {
 			case 1:
-				if(this.startsWithVowel()) {
+				if(this.useShortPrefix()) {
 					prefix = "c=";
 				}
 				else {
@@ -140,10 +149,3 @@ Verb.prototype.conjugateClass3 = function(person, singular) {
 Verb.prototype.conjugate = function(person, singular) {
 	return this['conjugateClass' + this.transitivity](person, singular);
 };
-
-let foo = new Verb("ne", "am", "is", "are", 2);
-console.log("Person\t\tSing.\t\tPlur.");
-
-for(let ii = 1; ii <= 4; ii++) {
-	console.log(ii + "\t\t" + foo.conjugate(ii, true) + "\t\t" + foo.conjugate(ii, false));
-}
