@@ -88,6 +88,36 @@ function formatAinuVocabList() {
         let syllable = 0;
         let kana = '';
         
+        // Add verb conjugation overlay
+        if(vocab[ii].classList.contains("vocab-verb0") || 
+           vocab[ii].classList.contains("vocab-verb1") || 
+           vocab[ii].classList.contains("vocab-verb2") || 
+           vocab[ii].classList.contains("vocab-verb3")) {
+           vocab[ii].onmouseover = (function() { var verb = vocab[ii].textContent;
+            verbs[ii].classList.add("tooltip");
+            var tip = vocab[ii].appendChild(document.createElement("span"));
+            tip.classList.add("tooltiptext");
+            var table = tip.appendChild(document.createElement("table"));
+            for(var jj = 0; jj < 5; jj++) {
+                var row  = table.appendChild(document.createElement("tr"));
+                if(jj === 0) {
+                    let cell = row.appendChild(document.createElement("th"));
+                    cell.textContent = "Person";
+                    cell = row.appendChild(document.createElement("th"));
+                    cell.textContent = "Singular";
+                    cell = row.appendChild(document.createElement("th"));
+                    cell.textContent = "Plural";
+                } else {
+                    let cell = row.appendChild(document.createElement("td"));
+                    cell.textContent = jj;
+                    cell = row.appendChild(document.createElement("td"));
+                    cell.textContent = verbList[verb].conjugate(jj, true);
+                    cell = row.appendChild(document.createElement("td"));
+                    cell.textContent = verbList[verb].conjugate(jj, false);
+                }
+            }
+        }
+        
         if(vocab[ii].hasAttribute('setkana')) {
             kana = vocab[ii].getAttribute('setkana');
         }
