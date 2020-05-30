@@ -135,6 +135,7 @@ function formatAinuVocabList() {
         vocab[ii].textContent += "（" + kana + "）";
         if(tooltip) {
             vocab[ii].appendChild(tooltip);
+            tooltip = undefined;
         }
     }
 }
