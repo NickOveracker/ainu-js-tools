@@ -88,6 +88,7 @@ function formatAinuVocabList() {
         let syllable = 0;
         let kana = '';
         
+        var tooltip;
         // Add verb conjugation overlay
         if(vocab[ii].classList.contains("vocab-verb0") || 
            vocab[ii].classList.contains("vocab-verb1") || 
@@ -95,7 +96,7 @@ function formatAinuVocabList() {
            vocab[ii].classList.contains("vocab-verb3")) {
             var verb = vocab[ii].textContent;
             vocab[ii].classList.add("tooltip");
-            var tip = vocab[ii].appendChild(document.createElement("span"));
+            tooltip = document.createElement("span");
             tip.classList.add("tooltiptext");
             var table = tip.appendChild(document.createElement("table"));
             for(var jj = 0; jj < 5; jj++) {
@@ -131,7 +132,10 @@ function formatAinuVocabList() {
         if(syllable >= 0) {
             vocab[ii].textContent = addAccent(vocab[ii].textContent, syllable);
         }
-    vocab[ii].textContent += "（" + kana + "）";
+        vocab[ii].textContent += "（" + kana + "）";
+        if(tooltip) {
+            vocab[ii].appendChild(tooltip);
+        }
     }
 }
 
