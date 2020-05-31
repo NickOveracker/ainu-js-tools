@@ -50,7 +50,7 @@ function addAccent(word, syllable) {
             }
         }
 
-        if(vowels.length > 1 && (syllable <= vowels.length)) {
+        if((offset > 0 || vowels.length > 1) && (syllable <= vowels.length)) {
              if(syllable === 0) {
                 // Heavy if there are two consonants between the first and second vowels.
                 let firstSyllHeavy = (word.charAt(vowels[0]+1) !== '=') && (vowels[1] - vowels[0] > 2);
@@ -134,10 +134,14 @@ function generateVerbTooltip(verbElement) {
             } else {
                 // Generate the regular rows.
                 // Start with the text elements...
-                let singularLatin = verbList[verb].conjugate(jj, true);
-                let pluralLatin = verbList[verb].conjugate(jj, false);
-                let singularKana = latinToKana(singularLatin);
-                let pluralKana = latinToKana(pluralLatin);
+                let singularLatin = document.createElement("p");
+                singularLatin.textContent = verbList[verb].conjugate(jj, true);
+                let pluralLatin = document.createElement("p");
+                pluralLatin.textContent = verbList[verb].conjugate(jj, false);
+                let singularKana = document.createElement("p");
+                singularKana.textContent = latinToKana(singularLatin);
+                let pluralKana = document.createElement("p");
+                pluralKana.textElement = latinToKana(pluralLatin);
                 
                 // Add accents to the latin text
                 if(verbList[verb].accent >= 0) {
@@ -149,9 +153,11 @@ function generateVerbTooltip(verbElement) {
                 let cell = row.appendChild(document.createElement("td"));
                 cell.textContent = jj;
                 cell = row.appendChild(document.createElement("td"));
-                cell.textContent = singularLatin + "<br/>" + singularKana;
+                cell.appendChild(singularLatin);
+                cell.appendChild(singularKana);
                 cell = row.appendChild(document.createElement("td"));
-                cell.textContent = pluralLatin + "<br/>" + pluralKana;
+                cell.appendChild(pluralLatin);
+                cell.appendChild(pluralKana);
             }
         }
     }
