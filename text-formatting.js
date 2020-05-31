@@ -66,7 +66,7 @@ function addAccent(word, syllable) {
 function latinToKana(word) {
     let retStr = '';
     let vowels = [];
-    word = word.replace(
+    word = word.replace("'",'');
     word = word.replace('=','');
 
     for(let ii = 0; ii < word.length; ii++) {
