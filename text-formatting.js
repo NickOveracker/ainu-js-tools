@@ -37,7 +37,10 @@ function addAccent(word, syllable) {
         offset = 'a='.length;
     } else if(word.indexOf('i=') === 0) {
         offset = 'i='.length;
-    }
+    } else if(word.indexOf('=') >= 0) {
+		// otherwise, ignore the default accented syllable
+		syllable = 0;
+	}
 
     if(syllable !== -1) {
 
@@ -136,8 +139,8 @@ function generateVerbTooltip(verbElement) {
                 
                 // Add accents to the latin text
                 if(verbList[verb].accent >= 0) {
-                    singularLatin = addAccent(singularLatin, syllable);
-                    pluralLatin = addAccent(pluralLatin, syllable);
+                    singularLatin = addAccent(singularLatin, verbList[verb].accent);
+                    pluralLatin = addAccent(pluralLatin, verbList[verb].accent);
                 }
                 
                 // Now generate the cells themselves.
