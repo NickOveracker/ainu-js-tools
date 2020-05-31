@@ -25,6 +25,14 @@ function isVowel(char) {
     return false;
 }
 
+/**
+ * Swap out ASCII vowels with accented vowel characters.
+ * @param word: The word to accent as a string.
+ * @param syllable: The number of the syllable to accent.
+ *                  0 means "follow regular accenting rules"
+ *                  -1 means "no accent in stem"
+ */
+
 function addAccent(word, syllable) {
     let ret = word;
     let vowels = [];
@@ -42,21 +50,28 @@ function addAccent(word, syllable) {
         syllable = 0;
     }
 
+    // Add accent if this is an accented word.
     if(syllable !== -1) {
-
-        for(let ii = 0 + offset; ii < word.length; ii++) {
+        for(let ii = offset; ii < word.length; ii++) {
             if(isVowel(word.charAt(ii))) {
                 vowels.push(ii);
             }
         }
 
-        if((offset > 0 || vowels.length > 1) && (syllable <= vowels.length)) {
-             if(syllable === 0) {
-                // Heavy if there are two consonants between the first and second vowels.
-                let firstSyllHeavy = (word.charAt(vowels[0]+1) !== '=') && (vowels[1] - vowels[0] > 2);
-                syllable = firstSyllHeavy ? 1 : 2;
-            }
-            ret = swapVowel(word, vowels[syllable-1]);
+        // Make sure the selected syllable is actually valid before proceeding.
+        if(syllable <= vowels.length) {
+            if(vowels.length > 1) {
+                 // Case one: More than one vowel in the word.
+                 if(syllable === 0) {
+                    // Heavy if there are two consonants between the first and second vowels.
+                    let firstSyllHeavy = (word.charAt(vowels[0]+1) !== '=') && (vowels[1] - vowels[0] > 2);
+                    syllable = firstSyllHeavy ? 1 : 2;
+                }
+                ret = swapVowel(word, vowels[syllable-1]);
+            } else if(offset > 0) {
+                // Case 2: Only one vowel after an omitted prefix.
+                ret = swapVowel(word, vowels[0]);
+            } // Tacit Case 3: Only one vowel, and no prefix. No accent.
         }
     }
 
