@@ -38,9 +38,9 @@ function addAccent(word, syllable) {
     } else if(word.indexOf('i=') === 0) {
         offset = 'i='.length;
     } else if(word.indexOf('=') >= 0) {
-		// otherwise, ignore the default accented syllable
-		syllable = 0;
-	}
+        // otherwise, ignore the default accented syllable
+        syllable = 0;
+    }
 
     if(syllable !== -1) {
 
