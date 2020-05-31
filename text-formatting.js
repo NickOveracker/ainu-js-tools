@@ -28,10 +28,20 @@ function isVowel(char) {
 function addAccent(word, syllable) {
     let ret = word;
     let vowels = [];
+    let offset = 0;
+    
+    // Skip certain prefixes
+    if(word.indexOf('eci=') === 0) {
+        offset = 'eci='.length;
+    } else if(word.indexOf('a=') === 0) {
+        offset = 'a='.length;
+    } else if(word.indexOf('i=') === 0) {
+        offset = 'i='.length;
+    }
 
     if(syllable !== -1) {
 
-        for(let ii = 0; ii < word.length; ii++) {
+        for(let ii = 0 + offset; ii < word.length; ii++) {
             if(isVowel(word.charAt(ii))) {
                 vowels.push(ii);
             }
@@ -39,7 +49,8 @@ function addAccent(word, syllable) {
 
         if(vowels.length > 1 && (syllable <= vowels.length)) {
              if(syllable === 0) {
-                let firstSyllHeavy = vowels[1] - vowels[0] > 2;
+                // Heavy if there are two consonants between the first and second vowels.
+                let firstSyllHeavy = (word.charAt(vowels[0]+1) !== '=') && (vowels[1] - vowels[0] > 2);
                 syllable = firstSyllHeavy ? 1 : 2;
             }
             ret = swapVowel(word, vowels[syllable-1]);
@@ -81,43 +92,76 @@ function latinToKana(word) {
     return retStr;
 }
 
+/**
+ * Generate a tooltip with a verb conjugation table
+ * Returns undefined if the verb passed is not recognized.
+ *
+ * @param verbElement: The HTML element containing the verb.
+ */
+function generateVerbTooltip(verbElement) {
+    if(verbElement.classList.contains("vocab-verb0") || 
+       verbElement.classList.contains("vocab-verb1") || 
+       verbElement.classList.contains("vocab-verb2") || 
+       verbElement.classList.contains("vocab-verb3")) {
+           
+        // Get the stem.
+        var verb = verbElement.textContent;
+        
+        // Add the tooltip class to enable mousover.
+        verbElement.classList.add("tooltip");
+        
+        // Now, create the table span.
+        tooltip = document.createElement("span");
+        tooltip.classList.add("tooltiptext");
+        // Create the table itself inside the span.
+        var table = tooltip.appendChild(document.createElement("table"));
+        table.classList.add("conjugation-table");
+        for(var jj = 0; jj < 5; jj++) {
+            var row  = table.appendChild(document.createElement("tr"));
+            if(jj === 0) {
+                // Generate the header row.
+                let cell = row.appendChild(document.createElement("th"));
+                cell.textContent = "Person";
+                cell = row.appendChild(document.createElement("th"));
+                cell.textContent = "Singular";
+                cell = row.appendChild(document.createElement("th"));
+                cell.textContent = "Plural";
+            } else {
+                // Generate the regular rows.
+                // Start with the text elements...
+                let singularLatin = verbList[verb].conjugate(jj, true);
+                let pluralLatin = verbList[verb].conjugate(jj, false);
+                let singularKana = latinToKana(singularLatin);
+                let pluralKana = latinToKana(pluralLatin);
+                
+                // Add accents to the latin text
+                if(verbList[verb].accent >= 0) {
+                    singularLatin = addAccent(singularLatin, syllable);
+                    pluralLatin = addAccent(pluralLatin, syllable);
+                }
+                
+                // Now generate the cells themselves.
+                let cell = row.appendChild(document.createElement("td"));
+                cell.textContent = jj;
+                cell = row.appendChild(document.createElement("td"));
+                cell.textContent = singularLatin + "<br/>" + singularKana;
+                cell = row.appendChild(document.createElement("td"));
+                cell.textContent = pluralLatin + "<br/>" + pluralKana;
+            }
+        }
+    }
+}
+
 function formatAinuVocabList() {
     let vocab = document.getElementsByClassName('ainu-vocab');
+    let tooltip;
     
     for(let ii = 0; ii < vocab.length; ii++) {
         let syllable = 0;
         let kana = '';
         
-        var tooltip;
-        // Add verb conjugation overlay
-        if(vocab[ii].classList.contains("vocab-verb0") || 
-           vocab[ii].classList.contains("vocab-verb1") || 
-           vocab[ii].classList.contains("vocab-verb2") || 
-           vocab[ii].classList.contains("vocab-verb3")) {
-            var verb = vocab[ii].textContent;
-            vocab[ii].classList.add("tooltip");
-            tooltip = document.createElement("span");
-            tooltip.classList.add("tooltiptext");
-            var table = tooltip.appendChild(document.createElement("table"));
-            for(var jj = 0; jj < 5; jj++) {
-                var row  = table.appendChild(document.createElement("tr"));
-                if(jj === 0) {
-                    let cell = row.appendChild(document.createElement("th"));
-                    cell.textContent = "Person";
-                    cell = row.appendChild(document.createElement("th"));
-                    cell.textContent = "Singular";
-                    cell = row.appendChild(document.createElement("th"));
-                    cell.textContent = "Plural";
-                } else {
-                    let cell = row.appendChild(document.createElement("td"));
-                    cell.textContent = jj;
-                    cell = row.appendChild(document.createElement("td"));
-                    cell.textContent = verbList[verb].conjugate(jj, true);
-                    cell = row.appendChild(document.createElement("td"));
-                    cell.textContent = verbList[verb].conjugate(jj, false);
-                }
-            }
-        }
+        // This will be undefined if not a verb.
+        tooltip = generateVerbTooltip(vocab[ii]);
         
         if(vocab[ii].hasAttribute('setkana')) {
             kana = vocab[ii].getAttribute('setkana');
