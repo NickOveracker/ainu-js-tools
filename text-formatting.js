@@ -141,14 +141,14 @@ function generateVerbTooltip(verbElement) {
                 let pluralLatin = document.createElement("p");
                 pluralLatin.textContent = verbList[verb].conjugate(jj, false);
                 let singularKana = document.createElement("p");
-                singularKana.textContent = latinToKana(singularLatin);
+                singularKana.textContent = latinToKana(singularLatin.textContent);
                 let pluralKana = document.createElement("p");
-                pluralKana.textElement = latinToKana(pluralLatin);
+                pluralKana.textElement = latinToKana(pluralLatin.textContent);
                 
                 // Add accents to the latin text
                 if(verbList[verb].accent >= 0) {
-                    singularLatin = addAccent(singularLatin, verbList[verb].accent);
-                    pluralLatin = addAccent(pluralLatin, verbList[verb].accent);
+                    singularLatin = addAccent(singularLatin.textContent, verbList[verb].accent);
+                    pluralLatin = addAccent(pluralLatin.textContent, verbList[verb].accent);
                 }
                 
                 // Now generate the cells themselves.
