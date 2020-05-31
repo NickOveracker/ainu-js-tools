@@ -158,8 +158,7 @@ function generateVerbTooltip(verbElement) {
                 let singularKana = document.createElement("p");
                 singularKana.textContent = latinToKana(singularLatin.textContent);
                 let pluralKana = document.createElement("p");
-                pluralKana.textElement = latinToKana(pluralLatin.textContent);
-                console.log(pluralKana);
+                pluralKana.textContent = latinToKana(pluralLatin.textContent);
                 
                 // Add accents to the latin text
                 if(verbList[verb].accent >= 0) {
@@ -176,7 +175,6 @@ function generateVerbTooltip(verbElement) {
                 cell = row.appendChild(document.createElement("td"));
                 cell.appendChild(pluralLatin);
                 cell.appendChild(pluralKana);
-                console.log(cell);
             }
         }
     }
