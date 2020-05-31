@@ -147,8 +147,8 @@ function generateVerbTooltip(verbElement) {
                 
                 // Add accents to the latin text
                 if(verbList[verb].accent >= 0) {
-                    singularLatin = addAccent(singularLatin.textContent, verbList[verb].accent);
-                    pluralLatin = addAccent(pluralLatin.textContent, verbList[verb].accent);
+                    singularLatin.textContent = addAccent(singularLatin.textContent, verbList[verb].accent);
+                    pluralLatin.textContent = addAccent(pluralLatin.textContent, verbList[verb].accent);
                 }
                 
                 // Now generate the cells themselves.
