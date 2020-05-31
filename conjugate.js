@@ -9,7 +9,7 @@
  *                      0: Singular or plural
  *                      1: Singular only
  *                      2: Plural only
- * @param accent:       -1 if regular, -2 if unaccented.
+ * @param accent:       0 if regular, -1 if unaccented.
  *                      Otherwise, the number of the accented syllable.
  * @param definition:   English definition.
  */
