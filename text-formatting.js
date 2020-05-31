@@ -102,6 +102,8 @@ function latinToKana(word) {
  * @param verbElement: The HTML element containing the verb.
  */
 function generateVerbTooltip(verbElement) {
+    let tooltip;
+    
     if(verbElement.classList.contains("vocab-verb0") || 
        verbElement.classList.contains("vocab-verb1") || 
        verbElement.classList.contains("vocab-verb2") || 
@@ -153,6 +155,8 @@ function generateVerbTooltip(verbElement) {
             }
         }
     }
+    
+    return tooltip;
 }
 
 function formatAinuVocabList() {
