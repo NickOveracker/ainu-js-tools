@@ -81,8 +81,13 @@ function addAccent(word, syllable) {
 function latinToKana(word) {
     let retStr = '';
     let vowels = [];
+    
+    // ' and = interfere with syllable counting. Remove them.
     word = word.replace("'","");
     word = word.replace("=","");
+    
+    // mp becomes np for conversion purposes.
+    word = word.replace("mp","np");
 
     for(let ii = 0; ii < word.length; ii++) {
         if(isVowel(word.toLowerCase().charAt(ii))) {
