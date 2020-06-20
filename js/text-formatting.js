@@ -83,34 +83,50 @@ function latinToKana(word) {
     let vowels = [];
     
     // ' and = interfere with syllable counting. Remove them.
-    word = word.replace("'","");
     word = word.replace("=","");
     
     // mp becomes np for conversion purposes.
     word = word.replace("mp","np");
 
+    // Find the character indices of each vowel,
+    // and push those index numbers into the vowels array.
     for(let ii = 0; ii < word.length; ii++) {
         if(isVowel(word.toLowerCase().charAt(ii))) {
             vowels.push(ii);
         }
     }
-    if(vowels.length === 1) {
+    // If there's only one vowel, or the whole string is one character,
+    // convert the whole word in one go.
+    if(vowels.length === 1 || word.length === 1) {
         retStr += kanaMap[word];
     }
+    // Otherwise, break up the word by syllable and convert.
     else {
         let syllStart = 0;
         let syllEnd = 0;
         for(let ii = 1; ii < vowels.length; ii++) {
+            // Closed syllables
             if(vowels[ii] - vowels[ii-1] > 2) {
                 syllEnd = vowels[ii-1]+1;
             }
+            // Open syllables
             else {
                 syllEnd = vowels[ii-1];
             }
+            // Handle apostrophes at the beginning of a syllable
+            if(word.charAt(syllStart) === "'") {
+                syllStart++;
+            }
+            // and also at the end of a syllable
+            if(word.charAt(syllEnd) === "'") {
+                syllEnd--;
+            }
+            // Add the syllable to the kana string.
             retStr += kanaMap[word.substring(syllStart, syllEnd + 1)];
             syllStart = syllEnd + 1;
         }
         
+        // Final syllable
         retStr += kanaMap[word.substring(syllStart, word.length)];
     }
     
@@ -225,6 +241,15 @@ var kanaMap = {
     "u": "ウ",
     "e": "エ",
     "o": "オ",
+    "k": "ㇰ",
+    "s": "ㇱ",
+    "t": "ッ",
+    "n": "ン",
+    "m": "ㇺ",
+    "y": "イ",
+    "r": "ㇻ",
+    "w": "ウ",
+    "p": "ㇷ゚",
     "ka": "カ",
     "ki": "キ",
     "ku": "ク",
